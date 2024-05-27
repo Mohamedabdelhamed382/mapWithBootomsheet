@@ -49,13 +49,3 @@ class ViewController: UIViewController, BottomSheetViewProtocol, CustomViewProto
         bottomSheetView.scrollView.isScrollEnabled = false
     }
 }
-
-enum BottomSheetPosition {
-    case top
-    case down
-}
-
-protocol BottomSheetViewProtocol: AnyObject {
-    func bottomSheetPosition(position: BottomSheetPosition)
-}
-

@@ -80,3 +80,12 @@ class BottomSheetView: UIView {
         configure(minHeightRatio: minHeightRatio, maxHeightRatio: maxHeightRatio)
     }
 }
+
+enum BottomSheetPosition {
+    case top
+    case down
+}
+
+protocol BottomSheetViewProtocol: AnyObject {
+    func bottomSheetPosition(position: BottomSheetPosition)
+}

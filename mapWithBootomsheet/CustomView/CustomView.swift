@@ -37,14 +37,6 @@ class CustomView: BottomSheetView {
         scrollView.delegate = self
     }
     
-    func checkIfAtTop() {
-           if scrollView.contentOffset.y <= 0 {
-               print("The scroll view is at the top.")
-           } else {
-               print("The scroll view is not at the top.")
-           }
-    }
-
     func loadViewFromNib() -> UIView? {
         let bundle = Bundle(for: type(of: self))
         let nib = UINib(nibName: nibName, bundle: bundle)
