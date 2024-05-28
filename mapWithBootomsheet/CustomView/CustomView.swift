@@ -1,23 +1,11 @@
-//
-//  CustomView.swift
-//  mapWithBootomsheet
-//
-//  Created by Mohamed abdelhamed on 24/05/2024.
-//
-
 import UIKit
 
-protocol CustomViewProtocol: AnyObject {
-    func isScrolledToTop()
-}
-
-class CustomView: BottomSheetView {
+class CustomView: BottomSheetView, UIGestureRecognizerDelegate, UIScrollViewDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
 
     let nibName = "CustomView"
     var contentView: UIView?
-    weak var customViewDelegate: CustomViewProtocol?
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -35,6 +23,11 @@ class CustomView: BottomSheetView {
         self.addSubview(view)
         contentView = view
         scrollView.delegate = self
+        
+        // Set the gesture recognizer delegate
+        if let panGesture = self.gestureRecognizers?.first as? UIPanGestureRecognizer {
+            panGesture.delegate = self
+        }
     }
     
     func loadViewFromNib() -> UIView? {
@@ -43,16 +36,28 @@ class CustomView: BottomSheetView {
         return nib.instantiate(withOwner: self, options: nil).first as? UIView
     }
 
-}
-
-extension CustomView: UIScrollViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-           if isScrolledToTop(scrollView: scrollView) {
-               customViewDelegate?.isScrolledToTop()
-           }
-       }
+    // Override the gesture recognizer delegate method
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
     
-       func isScrolledToTop(scrollView: UIScrollView) -> Bool {
-           return scrollView.contentOffset.y <= 0
-       }
+    // New method to determine if the pan gesture should be recognized
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if scrollView.contentOffset.y <= 0 {
+            scrollView.isScrollEnabled = false
+            return true
+        } else {
+            scrollView.isScrollEnabled = true
+            return false
+        }
+    }
+    
+    // UIScrollViewDelegate method to handle when the scroll view scrolls
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y <= 0 {
+            scrollView.isScrollEnabled = false
+        } else {
+            scrollView.isScrollEnabled = true
+        }
+    }
 }

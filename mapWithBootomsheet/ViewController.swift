@@ -1,8 +1,8 @@
 import UIKit
 import MapKit
 
-class ViewController: UIViewController, BottomSheetViewProtocol, CustomViewProtocol {
-  
+class ViewController: UIViewController, BottomSheetViewProtocol {
+
     let mapView = MKMapView()
     let bottomSheetView = CustomView()
     
@@ -12,7 +12,6 @@ class ViewController: UIViewController, BottomSheetViewProtocol, CustomViewProto
         setupMapView()
         setupBottomSheet()
         bottomSheetView.bottomSheetViewDelegate = self
-        bottomSheetView.customViewDelegate = self
 
     }
     
@@ -42,10 +41,5 @@ class ViewController: UIViewController, BottomSheetViewProtocol, CustomViewProto
             print("Bottom sheet is at the down position")
             bottomSheetView.scrollView.isScrollEnabled = false
         }
-    }
-    
-    func isScrolledToTop() {
-        print("Scrolled to top.....")
-        bottomSheetView.scrollView.isScrollEnabled = false
     }
 }

@@ -59,6 +59,11 @@ class BottomSheetView: UIView {
                 self.heightConstraint.constant = targetHeight
                 superview.layoutIfNeeded()
             }
+            
+            // Update the scroll view's scrolling behavior
+            if let customView = self as? CustomView {
+                customView.scrollView.isScrollEnabled = targetHeight == maxHeight
+            }
         }
         
         bottomSheetViewDelegate?.bottomSheetPosition(position: heightConstraint.constant == maxHeight ? .top : .down)
