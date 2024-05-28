@@ -53,8 +53,16 @@ class BottomSheetView: UIView {
         gesture.setTranslation(.zero, in: superview)
         
         if gesture.state == .ended {
-            let midHeight = (minHeight + maxHeight) / 2
-            let targetHeight = newHeight < midHeight ? minHeight : maxHeight
+            let velocity = gesture.velocity(in: superview)
+            let isMovingUp = velocity.y < 0
+
+            let targetHeight: CGFloat
+            if isMovingUp {
+                targetHeight = maxHeight
+            } else {
+                targetHeight = minHeight
+            }
+
             UIView.animate(withDuration: 0.3) {
                 self.heightConstraint.constant = targetHeight
                 superview.layoutIfNeeded()
