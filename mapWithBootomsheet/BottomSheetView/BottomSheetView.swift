@@ -1,10 +1,3 @@
-//
-//  BottomSheetView.swift
-//  mapWithBootomsheet
-//
-//  Created by Mohamed abdelhamed on 27/05/2024.
-//
-
 import UIKit
 
 class BottomSheetView: UIView {
@@ -63,18 +56,23 @@ class BottomSheetView: UIView {
                 targetHeight = minHeight
             }
 
-            UIView.animate(withDuration: 0.3) {
+            UIView.animate(withDuration: 0.3, animations: {
                 self.heightConstraint.constant = targetHeight
                 superview.layoutIfNeeded()
-            }
-            
-            // Update the scroll view's scrolling behavior
-            if let customView = self as? CustomView {
-                customView.scrollView.isScrollEnabled = targetHeight == maxHeight
+            }) { _ in
+                // Notify delegate when the animation completes
+                self.bottomSheetViewDelegate?.bottomSheetSettled(position: targetHeight == self.maxHeight ? .top : .down)
+                
+                // Update the scroll view's scrolling behavior
+                if let customView = self as? CustomView {
+                    customView.scrollView.isScrollEnabled = targetHeight == self.maxHeight
+                }
             }
         }
         
-        bottomSheetViewDelegate?.bottomSheetPosition(position: heightConstraint.constant == maxHeight ? .top : .down)
+        if let customView = self as? CustomView {
+            customView.scrollView.isScrollEnabled = heightConstraint.constant == maxHeight
+        }
     }
     
     func attach(to parentView: UIView, minHeightRatio: CGFloat, maxHeightRatio: CGFloat) {
@@ -100,5 +98,5 @@ enum BottomSheetPosition {
 }
 
 protocol BottomSheetViewProtocol: AnyObject {
-    func bottomSheetPosition(position: BottomSheetPosition)
+    func bottomSheetSettled(position: BottomSheetPosition)
 }

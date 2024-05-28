@@ -1,7 +1,7 @@
 import UIKit
 import MapKit
 
-class ViewController: UIViewController, BottomSheetViewProtocol {
+class ViewController: UIViewController {
 
     let mapView = MKMapView()
     let bottomSheetView = CustomView()
@@ -30,16 +30,16 @@ class ViewController: UIViewController, BottomSheetViewProtocol {
     private func setupBottomSheet() {
         bottomSheetView.attach(to: view, minHeightRatio: 0.25, maxHeightRatio: 0.75)
     }
-    
-    func bottomSheetPosition(position: BottomSheetPosition) {
+}
+
+extension ViewController: BottomSheetViewProtocol {
+    func bottomSheetSettled(position: BottomSheetPosition) {
         switch position {
         case .top:
             print("Bottom sheet is at the top position")
-            bottomSheetView.scrollView.isScrollEnabled = true
             
         case .down:
             print("Bottom sheet is at the down position")
-            bottomSheetView.scrollView.isScrollEnabled = false
         }
     }
 }
